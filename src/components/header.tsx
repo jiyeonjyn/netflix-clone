@@ -1,15 +1,18 @@
-import { motion } from 'framer-motion';
+import { motion, useAnimation, useViewportScroll } from 'framer-motion';
+import { useEffect } from 'react';
 import { Link, useMatch } from 'react-router-dom';
 import styled from 'styled-components';
 import Logo from './logo';
 import SearchBox from './search_box';
 
-const Container = styled.header`
+const Container = styled(motion.header)`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 68px;
-  padding: 0 50px;
+  padding: 20px 40px;
+  position: fixed;
+  width: 100%;
+  top: 0;
 `;
 
 const NavBar = styled.nav`
@@ -46,12 +49,36 @@ const Circle = styled(motion.span)`
   background-color: ${(props) => props.theme.red};
 `;
 
+const containerVariants = {
+  top: {
+    backgroundColor: 'rgba(0, 0, 0, 0)',
+  },
+  scroll: {
+    backgroundColor: 'rgba(0, 0, 0, 1)',
+  },
+};
+
 const Header = () => {
   const homeMatch = useMatch('/');
   const tvMatch = useMatch('/tv');
 
+  const navAnimation = useAnimation();
+  const { scrollY } = useViewportScroll();
+  useEffect(() => {
+    scrollY.onChange(() => {
+      console.log(scrollY.get());
+      scrollY.get() > 76
+        ? navAnimation.start('scroll')
+        : navAnimation.start('top');
+    });
+  }, [scrollY, navAnimation]);
+
   return (
-    <Container>
+    <Container
+      variants={containerVariants}
+      animate={navAnimation}
+      initial="top"
+    >
       <NavBar>
         <Logo />
         <NavList>

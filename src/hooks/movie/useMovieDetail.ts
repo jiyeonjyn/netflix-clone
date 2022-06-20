@@ -1,5 +1,4 @@
 import { httpClient } from '../../service/http_client';
-import { AxiosError, AxiosResponse } from 'axios';
 import { useQuery } from 'react-query';
 import { MovieDetail } from '../../types';
 

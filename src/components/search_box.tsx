@@ -1,34 +1,97 @@
-import { useRef, useState } from 'react';
+import { motion } from 'framer-motion';
+import { useEffect, useRef, useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useOnClickOutside } from '../hooks/useOnClickOutside';
 
-const Container = styled.section`
+const Container = styled(motion.form)`
   display: flex;
   align-items: center;
+  justify-content: flex-start;
+  transform-origin: right;
+  padding: 5px 10px;
 `;
 
 const Svg = styled.svg`
   cursor: pointer;
 `;
 
-const Input = styled.input`
-  padding: 3px;
+const Input = styled(motion.input)`
+  padding: 0;
+  background-color: ${(props) => props.theme.black[0]};
+  color: ${(props) => props.theme.white[0]};
+  font-size: 16px;
 `;
 
+const containerVariants = {
+  inactive: {
+    border: '1px solid rgba(255, 255, 255, 0)',
+    backgroundColor: 'rgba(20, 20, 20, 0)',
+  },
+  active: {
+    border: '1px solid rgba(255, 255, 255, 1)',
+    backgroundColor: 'rgba(20, 20, 20, 1)',
+    transition: {
+      duration: 0.1,
+    },
+  },
+};
+
+const inputVariants = {
+  inactive: {
+    width: '0px',
+    paddingLeft: '0px',
+    backgroundColor: 'rgba(20, 20, 20, 0)',
+  },
+  active: {
+    width: '220px',
+    paddingLeft: '15px',
+    backgroundColor: 'rgba(20, 20, 20, 1)',
+    transition: {
+      type: 'tween',
+      duration: 0.3,
+    },
+  },
+};
+
+interface SearchForm {
+  query: string;
+}
+
 const SearchBox = () => {
+  const navigate = useNavigate();
+  const { search } = useLocation();
+  const query = new URLSearchParams(search);
+
   const [isActive, setIsActive] = useState(false);
   const toggleIsActive = () => setIsActive((prev) => !prev);
 
-  const containerRef = useRef<HTMLElement>(null);
+  const containerRef = useRef<HTMLFormElement>(null);
   useOnClickOutside(containerRef, () => setIsActive(false));
-  console.log(isActive);
+
+  const { register, handleSubmit, setFocus } = useForm<SearchForm>({
+    defaultValues: { query: query.get('query') || '' },
+  });
+  const onSubmit: SubmitHandler<SearchForm> = (data) =>
+    navigate(`/search?query=${data.query}`);
+
+  useEffect(() => {
+    isActive && setFocus('query');
+  }, [isActive, setFocus]);
 
   return (
-    <Container ref={containerRef}>
+    <Container
+      ref={containerRef}
+      onSubmit={handleSubmit(onSubmit)}
+      variants={containerVariants}
+      initial="inactive"
+      animate={isActive ? 'active' : 'inactive'}
+    >
       <Svg
-        width="30"
-        height="30"
-        viewBox="0 0 30 30"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
         onClick={toggleIsActive}
@@ -40,7 +103,15 @@ const SearchBox = () => {
           fill="currentColor"
         ></path>
       </Svg>
-      <Input placeholder="Title, Person, Genres" />
+      <Input
+        {...register('query', { required: true, maxLength: 80 })}
+        type="text"
+        placeholder="Titles, people, genres"
+        autoComplete="off"
+        variants={inputVariants}
+        initial="inactive"
+        animate={isActive ? 'active' : 'inactive'}
+      />
     </Container>
   );
 };
