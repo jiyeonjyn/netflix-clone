@@ -7,8 +7,8 @@ const Container = styled(Link)`
   align-items: center;
 `;
 
-const Svg = styled(motion.svg)`
-  margin-right: 25px;
+const Svg = styled(motion.svg)<{ windowwidth: number }>`
+  margin-right: ${(props) => (props.windowwidth > 600 ? '25px' : '0')};
   width: 92.5px;
   height: 30px;
   path {
@@ -35,6 +35,7 @@ const Logo = () => {
   return (
     <Container to="/">
       <Svg
+        windowwidth={window.innerWidth}
         width="1024"
         height="276.742"
         viewBox="0 0 1024 276.742"

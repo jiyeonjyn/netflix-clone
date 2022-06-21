@@ -76,13 +76,16 @@ const Info = styled(motion.div)`
 
 const rowVariants = {
   hidden: (isToBack: boolean) => ({
-    x: isToBack ? -window.innerWidth - 5 : window.innerWidth + 5,
+    x: isToBack ? -window.innerWidth + 80 : window.innerWidth - 80,
+    opacity: 0,
   }),
   visible: {
     x: 0,
+    opacity: 1,
   },
   exit: (isToBack: boolean) => ({
-    x: isToBack ? window.innerWidth + 5 : -window.innerWidth - 5,
+    x: isToBack ? window.innerWidth - 80 : -window.innerWidth + 80,
+    opacity: 0,
   }),
 };
 
@@ -174,7 +177,7 @@ const Slider = ({ movieData, tvData, title }: Props) => {
             initial="hidden"
             animate="visible"
             exit="exit"
-            transition={{ type: 'tween', duration: 1 }}
+            transition={{ type: 'tween', duration: 0.5 }}
             key={index}
             custom={isToBack}
             offset={offset}

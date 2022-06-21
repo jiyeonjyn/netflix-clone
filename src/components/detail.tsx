@@ -19,7 +19,7 @@ const Overlay = styled(motion.div)`
 const Container = styled.section<{ windowWidth: number }>`
   width: ${(props) => (props.windowWidth > 600 ? '40vw' : '100%')};
   min-width: ${(props) => (props.windowWidth > 600 ? '600px' : '0')};
-  height: 85vh;
+  height: ${(props) => (props.windowWidth > 600 ? '85vh' : '75vh')};
   position: absolute;
   left: 50%;
   top: 50%;
@@ -38,19 +38,19 @@ const ImgWrapper = styled.div`
   position: relative;
 `;
 
-const Img = styled.img`
+const Img = styled.img<{ windowWidth: number }>`
   width: 100%;
   height: auto;
-  min-height: 300px;
+  min-height: ${(props) => (props.windowWidth > 600 ? '300px' : '200px')};
   object-fit: contain;
 `;
 
-const Blur = styled.div`
+const Blur = styled.div<{ windowWidth: number }>`
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 300px;
+  height: ${(props) => (props.windowWidth > 600 ? '300px' : '200px')};
   background-image: linear-gradient(
     rgba(0, 0, 0, 0),
     ${(props) => props.theme.black[1]}
@@ -68,7 +68,7 @@ const Title = styled.h3<{ windowWidth: number }>`
 const Genres = styled.div<{ windowWidth: number }>`
   font-size: ${(props) => (props.windowWidth > 600 ? '16px' : '12px')};
   padding-top: 25px;
-  overflow: hidden;
+
   span {
     margin-right: 10px;
     background-color: ${(props) => props.theme.black[2]};
@@ -121,8 +121,12 @@ const Detail = () => {
     >
       <Container windowWidth={windowWidth} onClick={(e) => e.stopPropagation()}>
         <ImgWrapper>
-          <Img src={makeImagePath(state.imagePath)} alt="" />
-          <Blur />
+          <Img
+            windowWidth={windowWidth}
+            src={makeImagePath(state.imagePath)}
+            alt=""
+          />
+          <Blur windowWidth={windowWidth} />
         </ImgWrapper>
         <Title windowWidth={windowWidth}>
           {state?.title}
