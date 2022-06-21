@@ -6,6 +6,7 @@ import { useTvAiringToday } from '../hooks/tv/useTvAiringToday';
 import { useTvOnTheAir } from '../hooks/tv/useTvOnTheAir';
 import { useTvPopular } from '../hooks/tv/useTvPolular';
 import { useTvTopRated } from '../hooks/tv/useTvTopRated';
+import { useScrollTop } from '../hooks/useScrollTop';
 import { makeImagePath } from '../utils';
 
 const Container = styled.section`
@@ -121,6 +122,8 @@ const SliderWrapper = styled.div<{ windowWidth: number }>`
 
 const TV = () => {
   const navigate = useNavigate();
+
+  useScrollTop();
 
   const { data: onTheAirData, isLoading } = useTvOnTheAir();
   const { data: airingTodayData } = useTvAiringToday();

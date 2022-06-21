@@ -5,6 +5,7 @@ import Slider from '../components/slider';
 import { useMovieNowPlaying } from '../hooks/movie/useMovieNowPlaying';
 import { useMovieTopRated } from '../hooks/movie/useMovieTopRated';
 import { useMovieUpcoming } from '../hooks/movie/useMovieUpcoming';
+import { useScrollTop } from '../hooks/useScrollTop';
 import { makeImagePath } from '../utils';
 
 const Container = styled.section`
@@ -121,6 +122,8 @@ const SliderWrapper = styled.div<{ windowWidth: number }>`
 
 const Home = () => {
   const navigate = useNavigate();
+
+  useScrollTop();
 
   const { data: nowPlayingData, isLoading } = useMovieNowPlaying();
   const { data: topRatedData } = useMovieTopRated();

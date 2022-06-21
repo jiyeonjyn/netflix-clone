@@ -29,6 +29,7 @@ const Container = styled.section<{ windowWidth: number }>`
   background-color: ${(props) => props.theme.black[1]};
   box-shadow: 0px 2px 4px rgba(48, 51, 107, 0.08);
   overflow-y: auto;
+  padding-bottom: 20px;
 `;
 
 const ImgWrapper = styled.div`
@@ -68,7 +69,6 @@ const Title = styled.h3<{ windowWidth: number }>`
 const Genres = styled.div<{ windowWidth: number }>`
   font-size: ${(props) => (props.windowWidth > 600 ? '16px' : '12px')};
   padding-top: 25px;
-
   span {
     margin-right: 10px;
     background-color: ${(props) => props.theme.black[2]};
