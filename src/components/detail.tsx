@@ -16,10 +16,10 @@ const Overlay = styled(motion.div)`
   z-index: 999;
 `;
 
-const Container = styled.section`
-  width: 40vw;
-  min-width: 600px;
-  height: 80vh;
+const Container = styled.section<{ windowWidth: number }>`
+  width: ${(props) => (props.windowWidth > 600 ? '40vw' : '100%')};
+  min-width: ${(props) => (props.windowWidth > 600 ? '600px' : '0')};
+  height: 85vh;
   position: absolute;
   left: 50%;
   top: 50%;
@@ -28,6 +28,7 @@ const Container = styled.section`
   overflow: hidden;
   background-color: ${(props) => props.theme.black[1]};
   box-shadow: 0px 2px 4px rgba(48, 51, 107, 0.08);
+  overflow-y: auto;
 `;
 
 const ImgWrapper = styled.div`
@@ -40,6 +41,7 @@ const ImgWrapper = styled.div`
 const Img = styled.img`
   width: 100%;
   height: auto;
+  min-height: 300px;
   object-fit: contain;
 `;
 
@@ -55,29 +57,31 @@ const Blur = styled.div`
   );
 `;
 
-const Title = styled.h3`
+const Title = styled.h3<{ windowWidth: number }>`
   color: ${(props) => props.theme.white[0]};
   padding: 0 40px;
-  font-size: 46px;
+  font-size: ${(props) => (props.windowWidth > 600 ? '46px' : '30px')};
   position: relative;
   top: -50px;
 `;
 
-const Genres = styled.div`
-  font-size: 16px;
+const Genres = styled.div<{ windowWidth: number }>`
+  font-size: ${(props) => (props.windowWidth > 600 ? '16px' : '12px')};
   padding-top: 25px;
+  overflow: hidden;
   span {
     margin-right: 10px;
     background-color: ${(props) => props.theme.black[2]};
     padding: 4px 9px;
     border-radius: 20px;
+    white-space: nowrap;
   }
 `;
 
-const Overview = styled.p`
+const Overview = styled.p<{ windowWidth: number }>`
   color: ${(props) => props.theme.white[0]};
   padding: 0 40px;
-  font-size: 20px;
+  font-size: ${(props) => (props.windowWidth > 600 ? '20px' : '14px')};
 `;
 
 type State = {
@@ -107,20 +111,22 @@ const Detail = () => {
   const movieGenre = queryClient.getQueryData<Genre[]>(['genre', 'movie']);
   const tvGenre = queryClient.getQueryData<Genre[]>(['genre', 'tv']);
 
+  const windowWidth = window.innerWidth;
+
   return (
     <Overlay
       onClick={onOverlayClick}
       exit={{ opacity: 0 }}
       animate={{ opacity: 1 }}
     >
-      <Container onClick={(e) => e.stopPropagation()}>
+      <Container windowWidth={windowWidth} onClick={(e) => e.stopPropagation()}>
         <ImgWrapper>
           <Img src={makeImagePath(state.imagePath)} alt="" />
           <Blur />
         </ImgWrapper>
-        <Title>
+        <Title windowWidth={windowWidth}>
           {state?.title}
-          <Genres>
+          <Genres windowWidth={windowWidth}>
             {state.genre.map((id) => (
               <span key={`${id}`}>
                 {movieMatch || query.get('movie_id')
@@ -130,7 +136,7 @@ const Detail = () => {
             ))}
           </Genres>
         </Title>
-        <Overview>{state?.overview}</Overview>
+        <Overview windowWidth={windowWidth}>{state?.overview}</Overview>
       </Container>
     </Overlay>
   );

@@ -13,14 +13,18 @@ const Container = styled.section`
   overflow: hidden;
 `;
 
-const Banner = styled.div`
+const Banner = styled.div<{ windowWidth: number }>`
   position: relative;
-  min-height: 800px;
+  min-height: ${(props) =>
+    props.windowWidth > 1400
+      ? '800px'
+      : props.windowWidth > 900
+      ? '600px'
+      : '300px'};
   max-height: 100vh;
 `;
 
 const Img = styled.img`
-  min-height: 800px;
   width: 100vw;
   height: auto;
   object-fit: contain;
@@ -38,42 +42,78 @@ const Blur = styled.div`
   );
 `;
 
-const Info = styled.div`
+const Info = styled.div<{ windowWidth: number }>`
   position: absolute;
-  top: 30%;
+  top: ${(props) =>
+    props.windowWidth > 1400 ? '30%' : props.windowWidth > 900 ? '22%' : '18%'};
   left: 0;
   padding: 0 40px;
 `;
 
-const Title = styled.h2`
-  font-size: 68px;
+const Title = styled.h2<{ windowWidth: number }>`
+  font-size: ${(props) =>
+    props.windowWidth > 1400
+      ? '68px'
+      : props.windowWidth > 900
+      ? '48px'
+      : '38px'};
   font-weight: 600;
   margin-bottom: 26px;
 `;
 
-const Overview = styled.p`
-  font-size: 24px;
-  width: 50%;
+const Overview = styled.p<{ windowWidth: number }>`
+  font-size: ${(props) =>
+    props.windowWidth > 1400
+      ? '24px'
+      : props.windowWidth > 900
+      ? '18px'
+      : '14px'};
+  width: ${(props) =>
+    props.windowWidth > 1400
+      ? '50%'
+      : props.windowWidth > 900
+      ? '65%'
+      : '100%'};
   margin-bottom: 26px;
 `;
 
-const SeeMore = styled.div`
+const SeeMore = styled.div<{ windowWidth: number }>`
   display: inline-flex;
   align-items: center;
-  padding: 11px 28px 12px 23px;
+  padding: ${(props) =>
+    props.windowWidth > 1400
+      ? '11px 28px 12px 23px'
+      : props.windowWidth > 900
+      ? '8px 12px'
+      : '3px 8px'};
   border-radius: 5px;
   background-color: rgba(255, 255, 255, 0.35);
   font-weight: 600;
   cursor: pointer;
   span {
-    margin-left: 15px;
-    font-size: 22px;
+    margin-left: ${(props) =>
+      props.windowWidth > 1400
+        ? '15px'
+        : props.windowWidth > 900
+        ? '12px'
+        : '8px'};
+    font-size: ${(props) =>
+      props.windowWidth > 1400
+        ? '22px'
+        : props.windowWidth > 900
+        ? '16px'
+        : '12px'};
   }
 `;
 
-const SliderWrapper = styled.div`
+const SliderWrapper = styled.div<{ windowWidth: number }>`
   position: relative;
-  top: -100px;
+  top: ${(props) =>
+    props.windowWidth > 1400
+      ? '-100px'
+      : props.windowWidth > 900
+      ? '-60px'
+      : '-30px'};
   section {
     margin-bottom: 30px;
   }
@@ -87,9 +127,11 @@ const TV = () => {
   const { data: popularData } = useTvPopular();
   const { data: topRatedData } = useTvTopRated();
 
+  const windowWidth = window.innerWidth;
+
   return (
     <Container>
-      <Banner>
+      <Banner windowWidth={windowWidth}>
         {!isLoading && (
           <>
             <Img
@@ -97,10 +139,15 @@ const TV = () => {
               alt=""
             />
             <Blur />
-            <Info>
-              <Title>{onTheAirData?.results[0].name}</Title>
-              <Overview>{onTheAirData?.results[0].overview}</Overview>
+            <Info windowWidth={windowWidth}>
+              <Title windowWidth={windowWidth}>
+                {onTheAirData?.results[0].name}
+              </Title>
+              <Overview windowWidth={windowWidth}>
+                {onTheAirData?.results[0].overview}
+              </Overview>
               <SeeMore
+                windowWidth={windowWidth}
                 onClick={() =>
                   navigate(`${onTheAirData?.results[0].id}`, {
                     state: {
@@ -132,7 +179,7 @@ const TV = () => {
           </>
         )}
       </Banner>
-      <SliderWrapper>
+      <SliderWrapper windowWidth={windowWidth}>
         <Slider title="Latest Shows" tvData={onTheAirData} />
         <Slider title="Airing Today" tvData={airingTodayData} />
         <Slider title="Popular" tvData={popularData} />
