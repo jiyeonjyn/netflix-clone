@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useState } from 'react';
-import { useMatch, useNavigate } from 'react-router-dom';
+import { useLocation, useMatch, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useOnResize } from '../hooks/useOnResize';
 import { ListResponse, Movie, TV } from '../types';
@@ -123,6 +123,7 @@ interface Props {
 const Slider = ({ movieData, tvData, title }: Props) => {
   const navigate = useNavigate();
   const searchMatch = useMatch('/search');
+  const { search } = useLocation();
 
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState(false);
@@ -189,15 +190,19 @@ const Slider = ({ movieData, tvData, title }: Props) => {
                   initial="normal"
                   variants={boxVariants}
                   onClick={() =>
-                    !searchMatch &&
-                    navigate(`/movie/${movie.id}`, {
-                      state: {
-                        title: movie.title,
-                        overview: movie.overview,
-                        imagePath: movie.backdrop_path,
-                        genre: movie.genre_ids,
-                      },
-                    })
+                    navigate(
+                      searchMatch
+                        ? `/search${search}&movie_id=${movie.id}`
+                        : `movie/${movie.id}`,
+                      {
+                        state: {
+                          title: movie.title,
+                          overview: movie.overview,
+                          imagePath: movie.backdrop_path,
+                          genre: movie.genre_ids,
+                        },
+                      }
+                    )
                   }
                   transition={{ type: 'tween' }}
                 >
@@ -225,15 +230,19 @@ const Slider = ({ movieData, tvData, title }: Props) => {
                   initial="normal"
                   variants={boxVariants}
                   onClick={() =>
-                    !searchMatch &&
-                    navigate(`/tv/${tv.id}`, {
-                      state: {
-                        title: tv.name,
-                        overview: tv.overview,
-                        imagePath: tv.backdrop_path,
-                        genre: tv.genre_ids,
-                      },
-                    })
+                    navigate(
+                      searchMatch
+                        ? `/search${search}&tv_id=${tv.id}`
+                        : `${tv.id}`,
+                      {
+                        state: {
+                          title: tv.name,
+                          overview: tv.overview,
+                          imagePath: tv.backdrop_path,
+                          genre: tv.genre_ids,
+                        },
+                      }
+                    )
                   }
                   transition={{ type: 'tween' }}
                 >

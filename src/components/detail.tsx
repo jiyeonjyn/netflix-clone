@@ -92,8 +92,16 @@ const Detail = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const state = location.state as State;
+  const query = new URLSearchParams(location.search);
 
-  const onOverlayClick = () => navigate(movieMatch ? '/' : '/tv');
+  const onOverlayClick = () =>
+    navigate(
+      query.get('movie_id') || query.get('tv_id')
+        ? `/search?query=${query.get('query')}`
+        : movieMatch
+        ? '/'
+        : '/tv'
+    );
 
   const queryClient = useQueryClient();
   const movieGenre = queryClient.getQueryData<Genre[]>(['genre', 'movie']);
@@ -115,7 +123,7 @@ const Detail = () => {
           <Genres>
             {state.genre.map((id) => (
               <span key={`${id}`}>
-                {movieMatch
+                {movieMatch || query.get('movie_id')
                   ? movieGenre?.find((genre) => genre.id === id)?.name
                   : tvGenre?.find((genre) => genre.id === id)?.name}
               </span>

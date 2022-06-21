@@ -1,5 +1,7 @@
-import { useLocation } from 'react-router-dom';
+import { useEffect, useMemo } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import Detail from '../components/detail';
 import Slider from '../components/slider';
 import { useSearchMovie } from '../hooks/search/useSearchMovie';
 import { useSearchTv } from '../hooks/search/useSearchTv';
@@ -13,7 +15,12 @@ const Container = styled.section`
 
 const Search = () => {
   const { search } = useLocation();
-  const query = new URLSearchParams(search);
+  const query = useMemo(() => new URLSearchParams(search), [search]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    !query.get('query') && navigate('/');
+  }, [query, navigate]);
 
   const { data: movieData } = useSearchMovie(query.get('query') || '');
   const { data: tvData } = useSearchTv(query.get('query') || '');
@@ -22,6 +29,7 @@ const Search = () => {
     <Container>
       <Slider title="Movies" movieData={movieData} />
       <Slider title="TV Shows" tvData={tvData} />
+      {(query.get('movie_id') || query.get('tv_id')) && <Detail />}
     </Container>
   );
 };
