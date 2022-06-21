@@ -6,6 +6,7 @@ import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { theme } from './theme';
 import { BrowserRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import '@fortawesome/fontawesome-free/js/all.js';
 
 const GlobalStyle = createGlobalStyle`
 html, body, div, span, applet, object, iframe,

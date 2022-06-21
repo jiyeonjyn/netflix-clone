@@ -5,7 +5,7 @@ interface Collection {
   poster_path: string | null; // 포스터
 }
 
-interface Genre {
+export interface Genre {
   id: number;
   name: string;
 }

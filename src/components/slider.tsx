@@ -1,32 +1,53 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useMatch, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { useOnResize } from '../hooks/useOnResize';
 import { ListResponse, Movie, TV } from '../types';
 import { makeImagePath } from '../utils';
 
-const Container = styled.div`
-  position: relative;
-  top: -100px;
-  padding: 0 40px;
+const Container = styled.section``;
+
+const Title = styled.h2`
+  color: ${(props) => props.theme.white[0]};
+  font-size: 20px;
+  font-weight: 600;
+  padding: 15px 40px;
 `;
 
-const Row = styled(motion.div)`
+const Contents = styled.div`
+  position: relative;
+  height: 200px;
+`;
+
+const LeftArrow = styled.span`
+  font-size: 30px;
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  z-index: 1;
+`;
+
+const RightArrow = styled(LeftArrow)`
+  left: auto;
+  right: 10px;
+`;
+
+const Row = styled(motion.div)<{ offset: number }>`
+  padding: 0 40px;
   display: grid;
   gap: 5px;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(${(props) => props.offset}, 1fr);
   position: absolute;
   width: 100%;
 `;
 
-const Box = styled(motion.div)<{ bgPhoto: string }>`
-  background-color: white;
-  background-image: url(${(props) => props.bgPhoto});
-  background-size: cover;
-  background-position: center center;
-  height: 200px;
-  font-size: 66px;
+const Box = styled(motion.div)`
   cursor: pointer;
+  display: flex;
+  flex-direction: column;
   &:first-child {
     transform-origin: center left;
   }
@@ -35,38 +56,45 @@ const Box = styled(motion.div)<{ bgPhoto: string }>`
   }
 `;
 
+const Img = styled.img`
+  width: 100%;
+  height: 200px;
+  min-height: 200px;
+  max-height: 200px;
+  object-fit: cover;
+`;
+
 const Info = styled(motion.div)`
   padding: 10px;
-  background-color: ${(props) => props.theme.black[1]};
+  background-color: ${(props) => props.theme.black[2]};
   opacity: 0;
-  position: absolute;
-  width: 100%;
-  bottom: 0;
   h4 {
-    text-align: center;
     font-size: 18px;
+    padding: 0 10px;
   }
 `;
 
 const rowVariants = {
-  hidden: {
-    x: window.outerWidth + 5,
-  },
+  hidden: (isToBack: boolean) => ({
+    x: isToBack ? -window.innerWidth - 5 : window.innerWidth + 5,
+  }),
   visible: {
     x: 0,
   },
-  exit: {
-    x: -window.outerWidth - 5,
-  },
+  exit: (isToBack: boolean) => ({
+    x: isToBack ? window.innerWidth + 5 : -window.innerWidth - 5,
+  }),
 };
 
 const boxVariants = {
   normal: {
     scale: 1,
+    height: '200px',
   },
   hover: {
     scale: 1.3,
-    y: -80,
+    y: -50,
+    height: 'auto',
     transition: {
       delay: 0.5,
       duaration: 0.1,
@@ -86,54 +114,145 @@ const infoVariants = {
   },
 };
 
-const OFFSET = 6;
-
 interface Props {
   movieData?: ListResponse<Movie>;
   tvData?: ListResponse<TV>;
+  title: string;
 }
 
-const Slider = ({ movieData, tvData }: Props) => {
+const Slider = ({ movieData, tvData, title }: Props) => {
   const navigate = useNavigate();
+  const searchMatch = useMatch('/search');
 
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState(false);
+  const [isToBack, setIsToBack] = useState(false);
+  const windowWidth = window.innerWidth;
+  const [offset, setOffset] = useState(
+    windowWidth > 1400 ? 6 : windowWidth > 900 ? 4 : 2
+  );
 
-  const onBoxClicked = (movieId: number) => navigate(`/movies/${movieId}`);
-  const toggleLeaving = () => setLeaving((prev) => !prev);
+  useOnResize((changed: number) => setOffset(changed));
+
+  const decreaseIndex = () => {
+    const data = movieData || tvData;
+    if (!data || leaving) return;
+    setIsToBack(true);
+    setLeaving(true);
+    const totalMovies = data.results.length - 1;
+    const maxIndex = Math.floor(totalMovies / offset);
+    setIndex((prev) => (prev === 0 ? maxIndex : prev - 1));
+  };
+  const increaseIndex = () => {
+    const data = movieData || tvData;
+    if (!data || leaving) return;
+    setIsToBack(false);
+    setLeaving(true);
+    const totalMovies = data.results.length - 1;
+    const maxIndex = Math.floor(totalMovies / offset);
+    setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
+  };
 
   return (
     <Container>
-      <AnimatePresence initial={false} onExitComplete={toggleLeaving}>
-        <Row
-          variants={rowVariants}
-          initial="hidden"
-          animate="visible"
-          exit="exit"
-          transition={{ type: 'tween', duration: 1 }}
-          key={index}
+      <Title>{title}</Title>
+      <Contents>
+        <LeftArrow onClick={decreaseIndex}>
+          <i className="fa-solid fa-chevron-left"></i>
+        </LeftArrow>
+        <RightArrow onClick={increaseIndex}>
+          <i className="fa-solid fa-chevron-right"></i>
+        </RightArrow>
+        <AnimatePresence
+          initial={false}
+          custom={isToBack}
+          onExitComplete={() => setLeaving(false)}
         >
-          {movieData?.results
-            .slice(1)
-            .slice(OFFSET * index, OFFSET * index + OFFSET)
-            .map((movie) => (
-              <Box
-                layoutId={movie.id + ''}
-                key={movie.id}
-                whileHover="hover"
-                initial="normal"
-                variants={boxVariants}
-                onClick={() => onBoxClicked(movie.id)}
-                transition={{ type: 'tween' }}
-                bgPhoto={makeImagePath(movie.backdrop_path, 'w500')}
-              >
-                <Info variants={infoVariants}>
-                  <h4>{movie.title}</h4>
-                </Info>
-              </Box>
-            ))}
-        </Row>
-      </AnimatePresence>
+          <Row
+            variants={rowVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            transition={{ type: 'tween', duration: 1 }}
+            key={index}
+            custom={isToBack}
+            offset={offset}
+          >
+            {movieData?.results
+              .slice(title === 'Latest movies' ? 1 : 0)
+              .slice(offset * index, offset * index + offset)
+              .map((movie) => (
+                <Box
+                  layoutId={`${title}-${movie.id}`}
+                  key={`${title}-${movie.id}`}
+                  whileHover="hover"
+                  initial="normal"
+                  variants={boxVariants}
+                  onClick={() =>
+                    !searchMatch &&
+                    navigate(`/movie/${movie.id}`, {
+                      state: {
+                        title: movie.title,
+                        overview: movie.overview,
+                        imagePath: movie.backdrop_path,
+                        genre: movie.genre_ids,
+                      },
+                    })
+                  }
+                  transition={{ type: 'tween' }}
+                >
+                  <Img
+                    src={makeImagePath(movie.backdrop_path, 'w500')}
+                    alt={movie.title}
+                  />
+                  <Info variants={infoVariants}>
+                    <h4>
+                      {movie.title}
+                      {movie.release_date &&
+                        `(${movie.release_date.slice(0, 4)})`}
+                    </h4>
+                  </Info>
+                </Box>
+              ))}
+            {tvData?.results
+              .slice(title === 'Latest Shows' ? 1 : 0)
+              .slice(offset * index, offset * index + offset)
+              .map((tv) => (
+                <Box
+                  layoutId={`${title}-${tv.id}`}
+                  key={`${title}-${tv.id}`}
+                  whileHover="hover"
+                  initial="normal"
+                  variants={boxVariants}
+                  onClick={() =>
+                    !searchMatch &&
+                    navigate(`/tv/${tv.id}`, {
+                      state: {
+                        title: tv.name,
+                        overview: tv.overview,
+                        imagePath: tv.backdrop_path,
+                        genre: tv.genre_ids,
+                      },
+                    })
+                  }
+                  transition={{ type: 'tween' }}
+                >
+                  <Img
+                    src={makeImagePath(tv.backdrop_path, 'w500')}
+                    alt={tv.name}
+                  />
+                  <Info variants={infoVariants}>
+                    <h4>
+                      {tv.name}
+                      {tv.first_air_date &&
+                        `(${tv.first_air_date.slice(0, 4)})`}
+                    </h4>
+                  </Info>
+                </Box>
+              ))}
+          </Row>
+        </AnimatePresence>
+      </Contents>
     </Container>
   );
 };

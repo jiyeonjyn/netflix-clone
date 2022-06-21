@@ -13,6 +13,7 @@ const Container = styled(motion.header)`
   position: fixed;
   width: 100%;
   top: 0;
+  z-index: 10;
 `;
 
 const NavBar = styled.nav`
@@ -60,13 +61,13 @@ const containerVariants = {
 
 const Header = () => {
   const homeMatch = useMatch('/');
-  const tvMatch = useMatch('/tv');
+  const movieMatch = useMatch('/movie/*');
+  const tvMatch = useMatch('/tv/*');
 
   const navAnimation = useAnimation();
   const { scrollY } = useViewportScroll();
   useEffect(() => {
     scrollY.onChange(() => {
-      console.log(scrollY.get());
       scrollY.get() > 76
         ? navAnimation.start('scroll')
         : navAnimation.start('top');
@@ -84,7 +85,7 @@ const Header = () => {
         <NavList>
           <NavItem>
             <Link to="/">Home</Link>
-            {homeMatch && <Circle layoutId="nav-circle" />}
+            {(homeMatch || movieMatch) && <Circle layoutId="nav-circle" />}
           </NavItem>
           <NavItem>
             <Link to="/tv">TV Shows</Link>
