@@ -70,11 +70,13 @@ const SearchBox = () => {
   const containerRef = useRef<HTMLFormElement>(null);
   useOnClickOutside(containerRef, () => setIsActive(false));
 
-  const { register, handleSubmit, setFocus } = useForm<SearchForm>({
+  const { register, handleSubmit, setFocus, setValue } = useForm<SearchForm>({
     defaultValues: { query: query.get('query') || '' },
   });
   const onSubmit: SubmitHandler<SearchForm> = (data) =>
     navigate(`/search?query=${data.query}`);
+
+  useEffect(() => setValue('query', query.get('query') || ''), [query]);
 
   useEffect(() => {
     isActive && setFocus('query');

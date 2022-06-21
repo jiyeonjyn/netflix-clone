@@ -7,6 +7,8 @@ import { useSearchMovie } from '../hooks/search/useSearchMovie';
 import { useSearchTv } from '../hooks/search/useSearchTv';
 
 const Container = styled.section`
+  min-height: 100vh;
+  overflow: hidden;
   padding-top: 100px;
   section {
     margin-bottom: 30px;
