@@ -8,6 +8,8 @@ import { useMovieUpcoming } from '../hooks/movie/useMovieUpcoming';
 import { useScrollTop } from '../hooks/useScrollTop';
 import { makeImagePath } from '../utils';
 
+const BASE_WIDTH = [1400, 900];
+
 const Container = styled.section`
   min-height: 100vh;
   overflow: hidden;
@@ -16,9 +18,9 @@ const Container = styled.section`
 const Banner = styled.div<{ windowWidth: number }>`
   position: relative;
   min-height: ${(props) =>
-    props.windowWidth > 1400
+    props.windowWidth > BASE_WIDTH[0]
       ? '800px'
-      : props.windowWidth > 900
+      : props.windowWidth > BASE_WIDTH[2]
       ? '600px'
       : '300px'};
   max-height: 100vh;
@@ -46,16 +48,20 @@ const Blur = styled.div`
 const Info = styled.div<{ windowWidth: number }>`
   position: absolute;
   top: ${(props) =>
-    props.windowWidth > 1400 ? '30%' : props.windowWidth > 900 ? '22%' : '18%'};
+    props.windowWidth > BASE_WIDTH[0]
+      ? '30%'
+      : props.windowWidth > BASE_WIDTH[2]
+      ? '22%'
+      : '18%'};
   left: 0;
   padding: 0 40px;
 `;
 
 const Title = styled.h2<{ windowWidth: number }>`
   font-size: ${(props) =>
-    props.windowWidth > 1400
+    props.windowWidth > BASE_WIDTH[0]
       ? '68px'
-      : props.windowWidth > 900
+      : props.windowWidth > BASE_WIDTH[2]
       ? '48px'
       : '38px'};
   font-weight: 600;
@@ -64,15 +70,15 @@ const Title = styled.h2<{ windowWidth: number }>`
 
 const Overview = styled.p<{ windowWidth: number }>`
   font-size: ${(props) =>
-    props.windowWidth > 1400
+    props.windowWidth > BASE_WIDTH[0]
       ? '24px'
-      : props.windowWidth > 900
+      : props.windowWidth > BASE_WIDTH[2]
       ? '18px'
       : '14px'};
   width: ${(props) =>
-    props.windowWidth > 1400
+    props.windowWidth > BASE_WIDTH[0]
       ? '50%'
-      : props.windowWidth > 900
+      : props.windowWidth > BASE_WIDTH[2]
       ? '65%'
       : '100%'};
   margin-bottom: 26px;
@@ -82,9 +88,9 @@ const SeeMore = styled.div<{ windowWidth: number }>`
   display: inline-flex;
   align-items: center;
   padding: ${(props) =>
-    props.windowWidth > 1400
+    props.windowWidth > BASE_WIDTH[0]
       ? '11px 28px 12px 23px'
-      : props.windowWidth > 900
+      : props.windowWidth > BASE_WIDTH[2]
       ? '8px 12px'
       : '3px 8px'};
   border-radius: 5px;
@@ -93,15 +99,15 @@ const SeeMore = styled.div<{ windowWidth: number }>`
   cursor: pointer;
   span {
     margin-left: ${(props) =>
-      props.windowWidth > 1400
+      props.windowWidth > BASE_WIDTH[0]
         ? '15px'
-        : props.windowWidth > 900
+        : props.windowWidth > BASE_WIDTH[2]
         ? '12px'
         : '8px'};
     font-size: ${(props) =>
-      props.windowWidth > 1400
+      props.windowWidth > BASE_WIDTH[0]
         ? '22px'
-        : props.windowWidth > 900
+        : props.windowWidth > BASE_WIDTH[2]
         ? '16px'
         : '12px'};
   }
@@ -110,9 +116,9 @@ const SeeMore = styled.div<{ windowWidth: number }>`
 const SliderWrapper = styled.div<{ windowWidth: number }>`
   position: relative;
   top: ${(props) =>
-    props.windowWidth > 1400
+    props.windowWidth > BASE_WIDTH[0]
       ? '-100px'
-      : props.windowWidth > 900
+      : props.windowWidth > BASE_WIDTH[2]
       ? '-60px'
       : '-30px'};
   section {

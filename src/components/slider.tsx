@@ -6,6 +6,8 @@ import { useOnResize } from '../hooks/useOnResize';
 import { ListResponse, Movie, TV } from '../types';
 import { makeImagePath } from '../utils';
 
+const BASE_WIDTH = [1400, 900];
+
 const Container = styled.section``;
 
 const Title = styled.h2`
@@ -133,7 +135,7 @@ const Slider = ({ movieData, tvData, title }: Props) => {
   const [isToBack, setIsToBack] = useState(false);
   const windowWidth = window.innerWidth;
   const [offset, setOffset] = useState(
-    windowWidth > 1400 ? 6 : windowWidth > 900 ? 4 : 2
+    windowWidth > BASE_WIDTH[0] ? 6 : windowWidth > BASE_WIDTH[1] ? 4 : 2
   );
 
   useOnResize((changed: number) => setOffset(changed));

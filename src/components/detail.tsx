@@ -5,6 +5,8 @@ import styled from 'styled-components';
 import { Genre } from '../types';
 import { makeImagePath } from '../utils';
 
+const BASE_WIDTH = 620;
+
 const Overlay = styled(motion.div)`
   position: fixed;
   top: 0;
@@ -17,9 +19,9 @@ const Overlay = styled(motion.div)`
 `;
 
 const Container = styled.section<{ windowWidth: number }>`
-  width: ${(props) => (props.windowWidth > 600 ? '40vw' : '100%')};
-  min-width: ${(props) => (props.windowWidth > 600 ? '600px' : '0')};
-  height: ${(props) => (props.windowWidth > 600 ? '85vh' : '75vh')};
+  width: ${(props) => (props.windowWidth > BASE_WIDTH ? '40vw' : '90%')};
+  min-width: ${(props) => (props.windowWidth > BASE_WIDTH ? '600px' : '0')};
+  height: ${(props) => (props.windowWidth > BASE_WIDTH ? '85vh' : '75vh')};
   position: absolute;
   left: 50%;
   top: 50%;
@@ -42,7 +44,8 @@ const ImgWrapper = styled.div`
 const Img = styled.img<{ windowWidth: number }>`
   width: 100%;
   height: auto;
-  min-height: ${(props) => (props.windowWidth > 600 ? '300px' : '200px')};
+  min-height: ${(props) =>
+    props.windowWidth > BASE_WIDTH ? '300px' : '180px'};
   object-fit: contain;
 `;
 
@@ -51,7 +54,7 @@ const Blur = styled.div<{ windowWidth: number }>`
   bottom: 0;
   left: 0;
   width: 100%;
-  height: ${(props) => (props.windowWidth > 600 ? '300px' : '200px')};
+  height: ${(props) => (props.windowWidth > BASE_WIDTH ? '300px' : '180px')};
   background-image: linear-gradient(
     rgba(0, 0, 0, 0),
     ${(props) => props.theme.black[1]}
@@ -60,17 +63,20 @@ const Blur = styled.div<{ windowWidth: number }>`
 
 const Title = styled.h3<{ windowWidth: number }>`
   color: ${(props) => props.theme.white[0]};
-  padding: 0 40px;
-  font-size: ${(props) => (props.windowWidth > 600 ? '46px' : '30px')};
+  padding: 0 ${(props) => (props.windowWidth > BASE_WIDTH ? '40px' : '20px')};
+  font-size: ${(props) => (props.windowWidth > BASE_WIDTH ? '46px' : '30px')};
   position: relative;
   top: -50px;
 `;
 
 const Genres = styled.div<{ windowWidth: number }>`
-  font-size: ${(props) => (props.windowWidth > 600 ? '16px' : '12px')};
-  padding-top: 25px;
+  font-size: ${(props) => (props.windowWidth > BASE_WIDTH ? '16px' : '12px')};
+  padding-top: 15px;
+  display: flex;
+  flex-wrap: wrap;
   span {
     margin-right: 10px;
+    margin-top: 10px;
     background-color: ${(props) => props.theme.black[2]};
     padding: 4px 9px;
     border-radius: 20px;
@@ -80,8 +86,8 @@ const Genres = styled.div<{ windowWidth: number }>`
 
 const Overview = styled.p<{ windowWidth: number }>`
   color: ${(props) => props.theme.white[0]};
-  padding: 0 40px;
-  font-size: ${(props) => (props.windowWidth > 600 ? '20px' : '14px')};
+  padding: 0 ${(props) => (props.windowWidth > BASE_WIDTH ? '40px' : '20px')};
+  font-size: ${(props) => (props.windowWidth > BASE_WIDTH ? '20px' : '14px')};
 `;
 
 type State = {

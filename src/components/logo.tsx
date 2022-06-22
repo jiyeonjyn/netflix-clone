@@ -2,13 +2,15 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
+const BASE_WIDTH = 600;
+
 const Container = styled(Link)`
   display: flex;
   align-items: center;
 `;
 
 const Svg = styled(motion.svg)<{ windowwidth: number }>`
-  margin-right: ${(props) => (props.windowwidth > 600 ? '25px' : '0')};
+  margin-right: ${(props) => (props.windowwidth > BASE_WIDTH ? '25px' : '0')};
   width: 92.5px;
   height: 30px;
   path {
