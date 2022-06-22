@@ -6,10 +6,12 @@ import Slider from '../components/slider';
 import { useSearchMovie } from '../hooks/search/useSearchMovie';
 import { useSearchTv } from '../hooks/search/useSearchTv';
 
-const Container = styled.section`
-  min-height: 100vh;
+const BASE_WIDTH = 900;
+
+const Container = styled.section<{ windowWidth: number }>`
   overflow: hidden;
-  padding-top: 100px;
+  padding-top: ${(props) =>
+    props.windowWidth > BASE_WIDTH ? '100px' : '30px'};
   section {
     margin-bottom: 30px;
   }
@@ -28,7 +30,7 @@ const Search = () => {
   const { data: tvData } = useSearchTv(query.get('query') || '');
 
   return (
-    <Container>
+    <Container windowWidth={window.innerWidth}>
       <Slider title="Movies" movieData={movieData} />
       <Slider title="TV Shows" tvData={tvData} />
       {(query.get('movie_id') || query.get('tv_id')) && <Detail />}

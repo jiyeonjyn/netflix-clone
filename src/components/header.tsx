@@ -5,15 +5,18 @@ import styled from 'styled-components';
 import Logo from './logo';
 import SearchBox from './search_box';
 
-const Container = styled(motion.header)`
+const BASE_WIDTH = 900;
+
+const Container = styled(motion.header)<{ windowwidth: number }>`
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 20px 40px;
-  position: fixed;
+  position: ${(props) => (props.windowwidth > BASE_WIDTH ? 'fixed' : 'sticky')};
   width: 100%;
   top: 0;
   z-index: 10;
+  box-shadow: 0px 2px 4px rgba(48, 51, 107, 0.08);
 `;
 
 const NavBar = styled.nav`
@@ -51,11 +54,14 @@ const Circle = styled(motion.span)`
 `;
 
 const containerVariants = {
-  top: {
-    backgroundColor: 'rgba(0, 0, 0, 0)',
-  },
+  top: () => ({
+    backgroundColor:
+      window.innerWidth > BASE_WIDTH
+        ? 'rgba(18, 18, 18, 0)'
+        : 'rgba(18, 18, 18, 1)',
+  }),
   scroll: {
-    backgroundColor: 'rgba(0, 0, 0, 1)',
+    backgroundColor: 'rgba(18, 18, 18, 1)',
   },
 };
 
@@ -76,6 +82,7 @@ const Header = () => {
 
   return (
     <Container
+      windowwidth={window.innerWidth}
       variants={containerVariants}
       animate={navAnimation}
       initial="top"

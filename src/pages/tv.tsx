@@ -9,10 +9,9 @@ import { useTvTopRated } from '../hooks/tv/useTvTopRated';
 import { useScrollTop } from '../hooks/useScrollTop';
 import { makeImagePath } from '../utils';
 
-const BASE_WIDTH = [1400, 900];
+const BASE_WIDTH = [1400, 900, 700];
 
 const Container = styled.section`
-  min-height: 100vh;
   overflow: hidden;
 `;
 
@@ -116,11 +115,11 @@ const SeeMore = styled.div<{ windowWidth: number }>`
 const SliderWrapper = styled.div<{ windowWidth: number }>`
   position: relative;
   top: ${(props) =>
-    props.windowWidth > BASE_WIDTH[0]
+    props.windowWidth > BASE_WIDTH[1]
       ? '-100px'
-      : props.windowWidth > BASE_WIDTH[1]
-      ? '-60px'
-      : '-30px'};
+      : props.windowWidth > BASE_WIDTH[2]
+      ? '-50px'
+      : '0'};
   section {
     margin-bottom: 30px;
   }

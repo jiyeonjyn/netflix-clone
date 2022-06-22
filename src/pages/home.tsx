@@ -8,10 +8,9 @@ import { useMovieUpcoming } from '../hooks/movie/useMovieUpcoming';
 import { useScrollTop } from '../hooks/useScrollTop';
 import { makeImagePath } from '../utils';
 
-const BASE_WIDTH = [1400, 900];
+const BASE_WIDTH = [1400, 900, 700];
 
 const Container = styled.section`
-  min-height: 100vh;
   overflow: hidden;
 `;
 
@@ -20,7 +19,7 @@ const Banner = styled.div<{ windowWidth: number }>`
   min-height: ${(props) =>
     props.windowWidth > BASE_WIDTH[0]
       ? '800px'
-      : props.windowWidth > BASE_WIDTH[2]
+      : props.windowWidth > BASE_WIDTH[1]
       ? '600px'
       : '300px'};
   max-height: 100vh;
@@ -50,7 +49,7 @@ const Info = styled.div<{ windowWidth: number }>`
   top: ${(props) =>
     props.windowWidth > BASE_WIDTH[0]
       ? '30%'
-      : props.windowWidth > BASE_WIDTH[2]
+      : props.windowWidth > BASE_WIDTH[1]
       ? '22%'
       : '18%'};
   left: 0;
@@ -61,7 +60,7 @@ const Title = styled.h2<{ windowWidth: number }>`
   font-size: ${(props) =>
     props.windowWidth > BASE_WIDTH[0]
       ? '68px'
-      : props.windowWidth > BASE_WIDTH[2]
+      : props.windowWidth > BASE_WIDTH[1]
       ? '48px'
       : '38px'};
   font-weight: 600;
@@ -72,13 +71,13 @@ const Overview = styled.p<{ windowWidth: number }>`
   font-size: ${(props) =>
     props.windowWidth > BASE_WIDTH[0]
       ? '24px'
-      : props.windowWidth > BASE_WIDTH[2]
+      : props.windowWidth > BASE_WIDTH[1]
       ? '18px'
       : '14px'};
   width: ${(props) =>
     props.windowWidth > BASE_WIDTH[0]
       ? '50%'
-      : props.windowWidth > BASE_WIDTH[2]
+      : props.windowWidth > BASE_WIDTH[1]
       ? '65%'
       : '100%'};
   margin-bottom: 26px;
@@ -90,7 +89,7 @@ const SeeMore = styled.div<{ windowWidth: number }>`
   padding: ${(props) =>
     props.windowWidth > BASE_WIDTH[0]
       ? '11px 28px 12px 23px'
-      : props.windowWidth > BASE_WIDTH[2]
+      : props.windowWidth > BASE_WIDTH[1]
       ? '8px 12px'
       : '3px 8px'};
   border-radius: 5px;
@@ -101,13 +100,13 @@ const SeeMore = styled.div<{ windowWidth: number }>`
     margin-left: ${(props) =>
       props.windowWidth > BASE_WIDTH[0]
         ? '15px'
-        : props.windowWidth > BASE_WIDTH[2]
+        : props.windowWidth > BASE_WIDTH[1]
         ? '12px'
         : '8px'};
     font-size: ${(props) =>
       props.windowWidth > BASE_WIDTH[0]
         ? '22px'
-        : props.windowWidth > BASE_WIDTH[2]
+        : props.windowWidth > BASE_WIDTH[1]
         ? '16px'
         : '12px'};
   }
@@ -116,11 +115,11 @@ const SeeMore = styled.div<{ windowWidth: number }>`
 const SliderWrapper = styled.div<{ windowWidth: number }>`
   position: relative;
   top: ${(props) =>
-    props.windowWidth > BASE_WIDTH[0]
+    props.windowWidth > BASE_WIDTH[1]
       ? '-100px'
       : props.windowWidth > BASE_WIDTH[2]
-      ? '-60px'
-      : '-30px'};
+      ? '-50px'
+      : '0'};
   section {
     margin-bottom: 30px;
   }

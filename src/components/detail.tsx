@@ -62,7 +62,6 @@ const Blur = styled.div<{ windowWidth: number }>`
 `;
 
 const Title = styled.h3<{ windowWidth: number }>`
-  color: ${(props) => props.theme.white[0]};
   padding: 0 ${(props) => (props.windowWidth > BASE_WIDTH ? '40px' : '20px')};
   font-size: ${(props) => (props.windowWidth > BASE_WIDTH ? '46px' : '30px')};
   position: relative;
@@ -85,7 +84,6 @@ const Genres = styled.div<{ windowWidth: number }>`
 `;
 
 const Overview = styled.p<{ windowWidth: number }>`
-  color: ${(props) => props.theme.white[0]};
   padding: 0 ${(props) => (props.windowWidth > BASE_WIDTH ? '40px' : '20px')};
   font-size: ${(props) => (props.windowWidth > BASE_WIDTH ? '20px' : '14px')};
 `;

@@ -5,12 +5,18 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useOnClickOutside } from '../hooks/useOnClickOutside';
 
-const Container = styled(motion.form)`
+const BASE_WIDTH = 600;
+
+const Container = styled(motion.form)<{ windowwidth: number }>`
   display: flex;
   align-items: center;
   justify-content: flex-start;
   transform-origin: right;
   padding: 5px 10px;
+  position: absolute;
+  right: ${(props) => (props.windowwidth > BASE_WIDTH ? '40px' : '20px')};
+  top: 50%;
+  transform: translateY(-50%);
 `;
 
 const Svg = styled.svg`
@@ -87,6 +93,7 @@ const SearchBox = () => {
 
   return (
     <Container
+      windowwidth={window.innerWidth}
       ref={containerRef}
       onSubmit={handleSubmit(onSubmit)}
       variants={containerVariants}

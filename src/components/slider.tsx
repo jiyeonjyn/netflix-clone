@@ -11,7 +11,6 @@ const BASE_WIDTH = [1400, 900];
 const Container = styled.section``;
 
 const Title = styled.h2`
-  color: ${(props) => props.theme.white[0]};
   font-size: 20px;
   font-weight: 600;
   padding: 15px 40px;
