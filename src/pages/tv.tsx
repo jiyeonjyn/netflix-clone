@@ -129,14 +129,14 @@ const SliderWrapper = styled.div<{ windowWidth: number }>`
 const TV = () => {
   const navigate = useNavigate();
 
-  useScrollTop();
-
   const { data: onTheAirData, isLoading } = useTvOnTheAir();
   const { data: airingTodayData } = useTvAiringToday();
   const { data: popularData } = useTvPopular();
   const { data: topRatedData } = useTvTopRated();
 
   const windowWidth = window.innerWidth;
+
+  useScrollTop();
 
   return (
     <Container>

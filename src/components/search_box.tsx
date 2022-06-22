@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -62,7 +62,7 @@ interface SearchForm {
 const SearchBox = () => {
   const navigate = useNavigate();
   const { search } = useLocation();
-  const query = new URLSearchParams(search);
+  const query = useMemo(() => new URLSearchParams(search), [search]);
 
   const [isActive, setIsActive] = useState(false);
   const toggleIsActive = () => setIsActive((prev) => !prev);
@@ -76,7 +76,10 @@ const SearchBox = () => {
   const onSubmit: SubmitHandler<SearchForm> = (data) =>
     navigate(`/search?query=${data.query}`);
 
-  useEffect(() => setValue('query', query.get('query') || ''), [query]);
+  useEffect(
+    () => setValue('query', query.get('query') || ''),
+    [query, setValue]
+  );
 
   useEffect(() => {
     isActive && setFocus('query');

@@ -129,13 +129,13 @@ const SliderWrapper = styled.div<{ windowWidth: number }>`
 const Home = () => {
   const navigate = useNavigate();
 
-  useScrollTop();
-
   const { data: nowPlayingData, isLoading } = useMovieNowPlaying();
   const { data: topRatedData } = useMovieTopRated();
   const { data: upcomingData } = useMovieUpcoming();
 
   const windowWidth = window.innerWidth;
+
+  useScrollTop();
 
   return (
     <Container>

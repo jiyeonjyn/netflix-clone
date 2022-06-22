@@ -22,19 +22,19 @@ const Contents = styled.div`
   height: 200px;
 `;
 
-const LeftArrow = styled.span`
-  font-size: 30px;
+const LeftArrow = styled.svg`
   position: absolute;
-  left: 10px;
+  left: 8px;
   top: 50%;
-  transform: translateY(-50%);
+  transform: translateY(-50%) rotateZ(180deg);
   cursor: pointer;
   z-index: 1;
 `;
 
 const RightArrow = styled(LeftArrow)`
   left: auto;
-  right: 10px;
+  right: 8px;
+  transform: translateY(-50%);
 `;
 
 const Row = styled(motion.div)<{ offset: number }>`
@@ -163,11 +163,29 @@ const Slider = ({ movieData, tvData, title }: Props) => {
     <Container>
       <Title>{title}</Title>
       <Contents>
-        <LeftArrow onClick={decreaseIndex}>
-          <i className="fa-solid fa-chevron-left"></i>
+        <LeftArrow
+          onClick={decreaseIndex}
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M6.23 20.23 8 22l10-10L8 2 6.23 3.77 14.46 12z"
+            fill="rgba(255, 255, 255, 0.9)"
+          ></path>
         </LeftArrow>
-        <RightArrow onClick={increaseIndex}>
-          <i className="fa-solid fa-chevron-right"></i>
+        <RightArrow
+          onClick={increaseIndex}
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M6.23 20.23 8 22l10-10L8 2 6.23 3.77 14.46 12z"
+            fill="rgba(255, 255, 255, 0.9)"
+          ></path>
         </RightArrow>
         <AnimatePresence
           initial={false}
